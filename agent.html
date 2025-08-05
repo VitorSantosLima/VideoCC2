@@ -1,1 +1,30 @@
-
+<html>
+<head>
+  <title>Agente - Video Call</title>
+  <script src="https://cdn.jsdelivr.net/npm/voximplant-websdk@4.9.0-2915/voximplant.min.js"></script>
+</head>
+<body>
+  <h2>Agente</h2>
+  <input type="user" id="login" placeholder="User Name">
+  <input type="password" id="password" placeholder="Senha">
+  <button onclick="login()">Login</button>
+  <br><br>
+  <button id="answer" onclick="acceptCall()">Accept Call</button>
+  <button id="decline" onclick="declineCall()">Decline Call</button>
+  <button onclick="endCall()">End Call</button>
+  <br><br>
+  
+  <select id="statusSelect">
+    <option value="Ready">Ready</option>
+    <option value="Online">Online</option>
+    <option value="Offline">Offline</option>  
+  </select>
+  <button onclick="statusChange()">Atualizar Status</button>
+  <br><br> 
+  <video id="localVideo" autoplay muted playsinline style="width: 200px; border: 1px solid #ccc;"></video>
+  <video id="remoteVideo" autoplay playsinline></video>
+  
+  
+  <script>agent.js</script>
+</body>
+</html>
