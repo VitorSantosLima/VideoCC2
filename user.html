@@ -1,1 +1,20 @@
+<html>
+<head>
+  <title>Client</title>
+</head>
+<body>
+  <h2>Cliente - Video Call</h2>
 
+  <button onclick="startCall()">Iniciar Chamada</button>
+  <button onclick="endCall()">Finalizar Chamada</button>
+
+  <h3>Prévia da Câmera</h3>
+  <video id="preview" autoplay muted playsinline width="300" height="200"></video>
+
+  <h3>Vídeo do Agente</h3>
+  <video id="remoteVideo" autoplay playsinline width="300" height="200"></video>
+  
+  <script src="https://cdn.jsdelivr.net/npm/voximplant-websdk@4.9.0-2915/voximplant.min.js"></script>
+  <script src="user.js"></script>
+</body>
+</html>
