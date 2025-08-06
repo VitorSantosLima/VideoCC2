@@ -65,16 +65,19 @@ async function startCall() {
 
         // Garantir que endpoints já conectados sejam tratados
         call.getEndpoints().forEach(endpoint => {
-            console.log("Endpoint já conectado:", endpoint.id);
-            setupEndpointEvents(endpoint);
+            console.log("Endpoint existente:", endpoint.id);
+            endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
+                const remoteVideo = document.getElementById("remoteVideo");
+                event.mediaRenderer.render(remoteVideo);
+            });
         });
     });
 
     // Quando um novo endpoint (agente) entra na chamada
-    call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
+    /*call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
         console.log("Novo endpoint adicionado:", e.endpoint.id);
         setupEndpointEvents(e.endpoint);
-    });
+    });*/
 
     call.on(VoxImplant.CallEvents.Failed, (e) => {
         console.error("Falha na chamada:", e);
