@@ -14,7 +14,7 @@ async function initPreview() {
 
 async function login() {
 
-    initParameters = {
+    const initParameters = {
         node: ACCOUNT_NODE,
         queueType:VoxImplant.QueueTypes.SmartQueue,
         micRequired: true,
@@ -34,8 +34,6 @@ async function login() {
       
     await sdk.connect();
 
-    await sdk.login(`user@videocontactcenter.vlima.voximplant.com`, "12345678");    
-      
     sdk.on(VoxImplant.Events.AuthResult, function (e) {
         if (e.result === true){
           console.log("Login com sucesso")
@@ -43,15 +41,15 @@ async function login() {
           console.log(e.code, e.message);
         }
     });
-      
+
+    await sdk.login(`user@videocontactcenter.vlima.voximplant.com`, "12345678");
 }
 
 async function startCall() {
 
     await login();
     
-    localStream = await navigator.mediaDevices.getUserMedia({ video:true, audio: true})
-    document.getElementById("localVideo").srcObject = localStream;
+    await initPreview();
     
     const callParameters = {
         number: "client",
@@ -61,7 +59,7 @@ async function startCall() {
         }
     }
 
-    const call = skk.call(callParameters);
+    call = sdk.call(callParameters);
 
     call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");

@@ -30,7 +30,7 @@ async function login() {
             console.log("Login com sucesso")
 
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio:true})
+                const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio:true})
                 document.getElementById("localVideo").srcObject = localStream;
             } catch (error) {
                 console.error("Erro ao acessar câmera: ", error);
@@ -56,7 +56,6 @@ async function statusChange() {
 sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     newCall = e.call;
     console.log("Incoming call from: ", newCall.from);
-    document.getElementById("remoteVideo").srcObject = e.stream;
     
     e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
         e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
@@ -66,7 +65,7 @@ sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     });
 
     newCall.addEventListener(VoxImplant.CallEvents.Disconnected, () => {
-        currentCall = null;
+        newCall = null;
     });
     
     newCall.addEventListener(VoxImplant.CallEvents.Failed, () => {
