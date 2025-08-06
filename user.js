@@ -20,8 +20,8 @@ async function login() {
         queueType:VoxImplant.QueueTypes.SmartQueue,
         micRequired: true,
         videoSupport: true,
-        remoteVideoContainerId: "remoteVideo",
-		localVideoContainerId: "localVideo",
+        //remoteVideoContainerId: "remoteVideo",
+		//localVideoContainerId: "localVideo",
         showDebugInfo: true,
         showWarnings: true
     };
@@ -48,7 +48,7 @@ async function login() {
 
 async function startCall() {
     await login();
-    await initPreview();
+    //await initPreview();
 
     const callParameters = {
         number: "client",
