@@ -46,7 +46,7 @@ async function login() {
 async function statusChange() {
     const newStatus = document.getElementById("statusSelect").value;
     try {
-        await sdk.setOperatorACDStatus(newStatus);
+        await sdk.setOperatorACDStatus(VoxImplant.OperatorACDStatuses[newStatus], newStatus);
         console.log("Status atualizado para:", newStatus);
     } catch (e) {
         console.error("Erro ao atualizar o status: ", e);
