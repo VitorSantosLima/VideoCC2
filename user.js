@@ -93,7 +93,7 @@ function setupEndpointEvents(endpoint) {
         const remoteVideo = document.getElementById("remoteVideo");
         event.mediaRenderer.render(remoteVideo);
         
-        remoteVideo.onplay().catch(err => {
+        remoteVideo.play().catch(err => {
             console.warn("Erro ao tentar dar play no vídeo remoto ", err);
         });
     });
