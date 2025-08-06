@@ -74,10 +74,10 @@ async function startCall() {
     });
 
     // Quando um novo endpoint (agente) entra na chamada
-    /*call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
+    call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
         console.log("Novo endpoint adicionado:", e.endpoint.id);
         setupEndpointEvents(e.endpoint);
-    });*/
+    });
 
     call.on(VoxImplant.CallEvents.Failed, (e) => {
         console.error("Falha na chamada:", e);
@@ -85,5 +85,13 @@ async function startCall() {
 
     call.on(VoxImplant.CallEvents.Disconnected, () => {
         console.log("Chamada encerrada");
+    });
+}
+
+function setupEndpointEvents(endpoint) {
+    endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
+        console.log("Vídeo remoto recebido do endpoint:", endpoint.id);
+        const remoteVideo = document.getElementById("remoteVideo");
+        event.mediaRenderer.render(remoteVideo);
     });
 }

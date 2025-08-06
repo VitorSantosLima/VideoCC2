@@ -74,13 +74,15 @@ sdk.on(VoxImplant.Events.IncomingCall, function (e) {
 })
 
 async function acceptCall () {
+    sdk.showLocalVideo(true);
+    
     newCall.answer (
         undefined,
         undefined,
         {useVideo:{sendVideo:true,receiveVideo:true}},
         false,
     )
-    //sdk.showLocalVideo(true);
+    
     const streamManager = VoxImplant.Hardware.StreamManager.get();
     streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
         let localNode = document.getElementById("localVideo");
