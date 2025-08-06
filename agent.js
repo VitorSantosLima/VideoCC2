@@ -1,10 +1,10 @@
 const sdk = VoxImplant.getInstance();
 const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
-let currentCall = null;
+let newCallCall = null;
 
 async function login() {
     
-    initParameters = {
+    const initParameters = {
         node:ACCOUNT_NODE,
         micRequired: true,
         videoSupport: true,
@@ -22,15 +22,15 @@ async function login() {
 
     await sdk.connect();
 
-    const login = document.getElementById("login").ariaValueMax;
-    const password = document.getElementById("password").ariaValueMax;
+    const login = document.getElementById("login").value;
+    const password = document.getElementById("password").value;
 
     sdk.on(voxImplant.Events.AuthResult , async function (e) {
         if (e.result === true) {
             console.log("Login com sucesso")
 
             try {
-                localStream = await navigator.mediaDevices.getUserMedia({ vide: true, audio:true})
+                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio:true})
                 document.getElementById("localVideo").srcObject = localStream;
             } catch (error) {
                 console.error("Erro ao acessar câmera: ", error);
@@ -46,7 +46,7 @@ async function login() {
 async function statusChange() {
     const newStatus = document.getElementById("statusSelect").ariaValueMax;
     try {
-        await sdk.setOperatorACDStatus(VoxImplant.setOperatorACDStatus[newStatus], newStatus);
+        await sdk.setOperatorACDStatus(newStatus);
         console.log("Status atualizado para:", newStatus);
     } catch (e) {
         console.error("Erro ao atualizar o status: ", e);
@@ -54,20 +54,28 @@ async function statusChange() {
 }
 
 sdk.on(VoxImplant.Events.IncomingCall, function (e) {
-    console.log("Incoming call from: ", e.call.from);
+    newCall = e.call;
+    console.log("Incoming call from: ", currentCall.from);
     document.getElementById("remoteVideo").srcObject = e.stream;
+    
+    e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
+        e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
+            const remoteVideo = document.getElementById("remoteVideo");
+            e.mediaRenderer.render(remoteVideo)
+        });
+    });
+
+    newCall.addEventListener(VoxImplant.CallEvents.Disconnected, () => {
+        currentCall = null;
+    });
+    
+    newCall.addEventListener(VoxImplant.CallEvents.Failed, () => {
+        console.log("Chamada falha")
+    });
 })
 
-e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
-    
-    e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
-        const remoteVideo = document.getElementById("remoteVideo");
-        e.mediaRenderer.render(remoteVideo)
-    });
-});
-
 async function acceptCall () {
-    e.call.answer (
+    newCall.answer (
         undefined,
         undefined,
         {useVideo:{sendVideo:true,receiveVideo:true}},
@@ -81,8 +89,3 @@ async function acceptCall () {
     })
       
 };
-
-e.call.addEventListener(VoxImplant.CallEvents.Disconnected, () => {});
-e.call.addEventListener(VoxImplant.CallEvents.Failed, () => {
-    console.log("Chamada falha")
-});
