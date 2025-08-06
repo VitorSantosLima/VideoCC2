@@ -68,6 +68,12 @@ async function startCall() {
     call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
 
+        const streamManager = VoxImplant.Hardware.StreamManager.get();
+        streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
+            const localVideo = document.getElementById("localVideo");
+            e.renderer.render(localVideo);
+        });
+
         // Garantir que endpoints já conectados sejam tratados
         call.getEndpoints().forEach(endpoint => {
             console.log("Endpoint existente:", endpoint.id);
@@ -109,3 +115,10 @@ function setupEndpointEvents(endpoint) {
         }
     });
 }
+
+function endCall() {
+      if (call) {
+        call.hangup();
+        console.log("Chamada finalizada pelo cliente");
+      }
+    }

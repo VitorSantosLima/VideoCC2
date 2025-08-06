@@ -112,3 +112,17 @@ async function acceptCall() {
         console.warn("⚠️ Nenhum vídeo sendo enviado pelo agente.");
     }
 }
+
+function declineCall () {
+    if (currentCall) {
+        currentCall.decline();
+        currentCall = null;
+    }
+};
+
+function endCall() {
+    if (currentCall) {
+        currentCall.hangup();
+        console.log("Chamada finalizada pelo agente");
+    }
+}
