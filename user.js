@@ -106,6 +106,6 @@ function setupEndpointEvents(endpoint) {
             }).catch((error) => {
                 console.error("Erro ao tentar dar play no vídeo remoto ", error);
             });
-        }/
+        }
     });
 }
