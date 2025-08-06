@@ -57,7 +57,7 @@ sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     newCall = e.call;
     console.log("Incoming call from: ", newCall.from);
     
-    e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
+    newCall.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
         e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
             const remoteVideo = document.getElementById("remoteVideo");
             e.mediaRenderer.render(remoteVideo)

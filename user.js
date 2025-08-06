@@ -1,6 +1,7 @@
 const sdk = VoxImplant.getInstance();
 const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
 let call, localStream;
+let newCall = null;
 
 async function initPreview() {
     try {
@@ -61,8 +62,12 @@ async function startCall() {
 
     call = sdk.call(callParameters);
 
-    call.on(VoxImplant.CallEvents.Connected, () => {
+    call.on(VoxImplant.CallEvents.Connected, (e) => {
         console.log("Chamada conectada");
+        e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
+            const remoteVideo = document.getElementById("remoteVideo");
+            e.mediaRenderer.render(remoteVideo)
+        });
     });
 
     call.on(VoxImplant.CallEvents.Failed, (e) => {
