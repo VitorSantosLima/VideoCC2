@@ -67,8 +67,7 @@ async function startCall() {
         call.getEndpoints().forEach(endpoint => {
             console.log("Endpoint existente:", endpoint.id);
             endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
-                const remoteVideo = document.getElementById("remoteVideo");
-                event.mediaRenderer.render(remoteVideo);
+                setupEndpointEvents(endpoint);
             });
         });
     });
@@ -93,5 +92,9 @@ function setupEndpointEvents(endpoint) {
         console.log("Vídeo remoto recebido do endpoint:", endpoint.id);
         const remoteVideo = document.getElementById("remoteVideo");
         event.mediaRenderer.render(remoteVideo);
+        
+        remoteVideo.onplay().catch(err => {
+            console.warn("Erro ao tentar dar play no vídeo remoto ", err);
+        });
     });
 }
