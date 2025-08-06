@@ -114,15 +114,15 @@ async function acceptCall() {
 }
 
 function declineCall () {
-    if (currentCall) {
-        currentCall.decline();
-        currentCall = null;
+    if (newCall) {
+        newCall.decline();
+        newCall = null;
     }
 };
 
 function endCall() {
-    if (currentCall) {
-        currentCall.hangup();
+    if (newCall) {
+        newCall.hangup();
         console.log("Chamada finalizada pelo agente");
     }
 }
