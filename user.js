@@ -64,14 +64,12 @@ async function startCall() {
 
     call.on(VoxImplant.CallEvents.Connected, (e) => {
         console.log("Chamada conectada");
-        streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
-           let localNode = document.getElementById("localVideo");
-            e.renderer.render(localNode)
-        })
-        /*e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
-            const remoteVideo = document.getElementById("remoteVideo");
-            e.mediaRenderer.render(remoteVideo)
-        });*/
+        call.getEndpoints().forEach(endpoint => {
+            endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
+                const remoteVideo = document.getElementById("remoteVideo");
+                event.mediaRenderer.render(remoteVideo);
+            });
+        });
     });
 
     call.on(VoxImplant.CallEvents.Failed, (e) => {
