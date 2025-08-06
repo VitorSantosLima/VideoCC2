@@ -99,10 +99,13 @@ function setupEndpointEvents(endpoint) {
         /*remoteVideo.play().catch(err => {
             console.warn("Erro ao tentar dar play no vídeo remoto ", err);
         });*/
-        remoteVideo.addEventListener("loadedmetadata", () => {
-            remoteVideo.play().catch(err => {
-                console.warn("Erro ao tentar dar play no vídeo remoto:", err);
+        const playPromise = remoteVideo.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                console.log("Reprodução do vídeo remoto iniciada");
+            }).catch((error) => {
+                console.error("Erro ao tentar dar play no vídeo remoto ", error);
             });
-        }, { once: true });
+        }/
     });
 }

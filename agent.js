@@ -75,7 +75,7 @@ sdk.on(VoxImplant.Events.IncomingCall, function (e) {
 
 async function acceptCall () {
     sdk.showLocalVideo(true);
-    
+
     newCall.answer (
         undefined,
         undefined,
@@ -88,5 +88,14 @@ async function acceptCall () {
         let localNode = document.getElementById("localVideo");
         e.renderer.render(localNode)
     })
+
+     const localStream = streamManager.getLocalStream();
+    const videoTracks = localStream ? localStream.getVideoTracks() : [];
+
+    if (videoTracks.length > 0 && videoTracks[0].enabled) {
+        console.log("✅ Agente está enviando vídeo:", videoTracks[0]);
+    } else {
+        console.warn("⚠️ Nenhum vídeo sendo enviado pelo agente.");
+    }
       
 };
