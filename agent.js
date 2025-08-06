@@ -55,41 +55,55 @@ async function statusChange() {
 
 sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     newCall = e.call;
-    console.log("Incoming call from: ", newCall.from);
-    
-    newCall.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
-        e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
-            const remoteVideo = document.getElementById("remoteVideo");
-            e.mediaRenderer.render(remoteVideo)
+    console.log("Chamada recebida de:", newCall.from);
+
+    newCall.addEventListener(VoxImplant.CallEvents.Connected, () => {
+        newCall.getEndpoints().forEach((endpoint) => {
+            endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
+                const remoteVideo = document.getElementById("remoteVideo");
+                event.mediaRenderer.render(remoteVideo);
+                console.log("📺 Vídeo remoto renderizado no agente");
+            });
+        });
+
+        newCall.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
+            e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
+                const remoteVideo = document.getElementById("remoteVideo");
+                event.mediaRenderer.render(remoteVideo);
+                console.log("Vídeo remoto renderizado após endpoint adicionado");
+            });
         });
     });
 
     newCall.addEventListener(VoxImplant.CallEvents.Disconnected, () => {
+        console.log("Chamada encerrada");
         newCall = null;
     });
-    
-    newCall.addEventListener(VoxImplant.CallEvents.Failed, () => {
-        console.log("Chamada falha")
-    });
-})
 
-async function acceptCall () {
+    newCall.addEventListener(VoxImplant.CallEvents.Failed, () => {
+        console.log("Chamada falhou");
+    });
+});
+
+async function acceptCall() {
+    
+    newCall.answer(
+        undefined,
+        undefined,
+        { sendVideo: true, receiveVideo: true },
+        false
+    );
+
     sdk.showLocalVideo(true);
 
-    newCall.answer (
-        undefined,
-        undefined,
-        {useVideo:{sendVideo:true,receiveVideo:true}},
-        false,
-    )
-    
     const streamManager = VoxImplant.Hardware.StreamManager.get();
-    streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
-        let localNode = document.getElementById("localVideo");
-        e.renderer.render(localNode)
-    })
+    streamManager.on(VoxImplant.Hardware.HardwareEvents.MediaRendererAdded, (e) => {
+        const localNode = document.getElementById("localVideo");
+        e.renderer.render(localNode);
+        console.log("📷 Vídeo local renderizado");
+    });
 
-     const localStream = streamManager.getLocalStream();
+    const localStream = streamManager.getLocalStream();
     const videoTracks = localStream ? localStream.getVideoTracks() : [];
 
     if (videoTracks.length > 0 && videoTracks[0].enabled) {
@@ -97,5 +111,4 @@ async function acceptCall () {
     } else {
         console.warn("⚠️ Nenhum vídeo sendo enviado pelo agente.");
     }
-      
-};
+}
