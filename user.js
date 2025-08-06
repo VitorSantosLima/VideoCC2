@@ -48,7 +48,7 @@ async function login() {
 
 async function startCall() {
     await login();
-    //await initPreview();
+    await initPreview();
 
     const callParameters = {
         number: "client",
@@ -116,9 +116,18 @@ function setupEndpointEvents(endpoint) {
     });
 }
 
+function initPreview() {
+    const streamManager = VoxImplant.Hardware.StreamManager.get();
+    streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
+        const localVideo = document.getElementById("localVideo");
+        e.renderer.render(localVideo);
+    });
+    sdk.showLocalVideo(true);
+}
+
 function endCall() {
-      if (call) {
+    if (call) {
         call.hangup();
         console.log("Chamada finalizada pelo cliente");
-      }
     }
+}
