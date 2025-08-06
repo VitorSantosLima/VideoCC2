@@ -40,7 +40,7 @@ async function login() {
         }
     });
 
-    await sdk.login(`${login}videocontactcenter.vlima.voximplant.com`, password)
+    await sdk.login(`${login}@videocontactcenter.vlima.voximplant.com`, password)
 }
 
 async function statusChange() {
