@@ -60,15 +60,18 @@ async function startCall() {
 
     call = sdk.call(callParameters);
 
+    call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
+        console.log("Novo endpoint adicionado ", e.endpoint.id);
+        setupEndpointEvents(e.endpoint);
+    })
+
     call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
 
         // Garantir que endpoints já conectados sejam tratados
         call.getEndpoints().forEach(endpoint => {
             console.log("Endpoint existente:", endpoint.id);
-            endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
-                setupEndpointEvents(endpoint);
-            });
+            setupEndpointEvents(endpoint);
         });
     });
 
