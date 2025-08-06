@@ -1,6 +1,6 @@
 const sdk = VoxImplant.getInstance();
 const ACCOUNT_NODE = VoxImplant.ConnectionNode.NODE_9;
-let newCallCall = null;
+let newCall = null;
 
 async function login() {
     
@@ -25,7 +25,7 @@ async function login() {
     const login = document.getElementById("login").value;
     const password = document.getElementById("password").value;
 
-    sdk.on(voxImplant.Events.AuthResult , async function (e) {
+    sdk.on(VoxImplant.Events.AuthResult , async function (e) {
         if (e.result === true) {
             console.log("Login com sucesso")
 
@@ -44,7 +44,7 @@ async function login() {
 }
 
 async function statusChange() {
-    const newStatus = document.getElementById("statusSelect").ariaValueMax;
+    const newStatus = document.getElementById("statusSelect").value;
     try {
         await sdk.setOperatorACDStatus(newStatus);
         console.log("Status atualizado para:", newStatus);
@@ -55,7 +55,7 @@ async function statusChange() {
 
 sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     newCall = e.call;
-    console.log("Incoming call from: ", currentCall.from);
+    console.log("Incoming call from: ", newCall.from);
     document.getElementById("remoteVideo").srcObject = e.stream;
     
     e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
