@@ -116,7 +116,7 @@ function setupEndpointEvents(endpoint) {
     });
 }
 
-function initPreview() {
+async function initPreview() {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     document.getElementById("localVideo").srcObject = localStream;
 }
