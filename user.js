@@ -117,12 +117,8 @@ function setupEndpointEvents(endpoint) {
 }
 
 function initPreview() {
-    const streamManager = VoxImplant.Hardware.StreamManager.get();
-    streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
-        const localVideo = document.getElementById("localVideo");
-        e.renderer.render(localVideo);
-    });
-    sdk.showLocalVideo(true);
+    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    document.getElementById("localVideo").srcObject = localStream;
 }
 
 function endCall() {
