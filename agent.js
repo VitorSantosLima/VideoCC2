@@ -58,15 +58,6 @@ sdk.on(VoxImplant.Events.IncomingCall, function (e) {
     document.getElementById("remoteVideo").srcObject = e.stream;
 })
 
-async function acceptCall () {
-    e.call.answer (
-        undefined,
-        undefined,
-        {useVideo:{sendVideo:true,receiveVideo:true}},
-        false,
-    )      
-};
-
 e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
     
     e.endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (e) => {
@@ -75,8 +66,23 @@ e.call.addEventListener(VoxImplant.CallEvents.Connected, (e) => {
     });
 });
 
+async function acceptCall () {
+    e.call.answer (
+        undefined,
+        undefined,
+        {useVideo:{sendVideo:true,receiveVideo:true}},
+        false,
+    )
+    sdk.showLocalVideo(true);
+    const streamManager = VoxImplant.Hardware.StreamManager.get();
+    streamManager.on(VoxImplant.HardwareEvents.MediaRendererUpdate, (e) => {
+        let localNode = document.getElementById("localVideo");
+        e.renderer.render(localNode)
+    })
+      
+};
+
 e.call.addEventListener(VoxImplant.CallEvents.Disconnected, () => {});
 e.call.addEventListener(VoxImplant.CallEvents.Failed, () => {
     console.log("Chamada falha")
 });
-
