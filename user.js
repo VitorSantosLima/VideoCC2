@@ -47,29 +47,33 @@ async function login() {
 }
 
 async function startCall() {
-
     await login();
-    
     await initPreview();
-    
+
     const callParameters = {
         number: "client",
         video: {
             sendVideo: true,
             receiveVideo: true
         }
-    }
+    };
 
     call = sdk.call(callParameters);
 
-    call.on(VoxImplant.CallEvents.Connected, (e) => {
+    call.on(VoxImplant.CallEvents.Connected, () => {
         console.log("Chamada conectada");
+
+        // Garantir que endpoints já conectados sejam tratados
         call.getEndpoints().forEach(endpoint => {
-            endpoint.on(VoxImplant.EndpointEvents.RemoteMediaAdded, (event) => {
-                const remoteVideo = document.getElementById("remoteVideo");
-                event.mediaRenderer.render(remoteVideo);
-            });
+            console.log("Endpoint já conectado:", endpoint.id);
+            setupEndpointEvents(endpoint);
         });
+    });
+
+    // Quando um novo endpoint (agente) entra na chamada
+    call.on(VoxImplant.CallEvents.EndpointAdded, (e) => {
+        console.log("Novo endpoint adicionado:", e.endpoint.id);
+        setupEndpointEvents(e.endpoint);
     });
 
     call.on(VoxImplant.CallEvents.Failed, (e) => {
