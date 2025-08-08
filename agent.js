@@ -94,13 +94,13 @@ async function acceptCall() {
         false
     );
 
-    sdk.showLocalVideo(true);
+    //sdk.showLocalVideo(true);
 
     const streamManager = VoxImplant.Hardware.StreamManager.get();
     streamManager.on(VoxImplant.Hardware.HardwareEvents.MediaRendererAdded, (e) => {
-        const localNode = document.getElementById("localVideo");
-        e.renderer.render(localNode);
-        console.log("📷 Vídeo local renderizado");
+        const localVideo = document.getElementById("localVideo");
+        e.renderer.render(localVideo);
+        console.log("Vídeo local renderizado");
     });
 
     const localStream = streamManager.getLocalStream();
