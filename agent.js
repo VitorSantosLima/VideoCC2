@@ -94,8 +94,6 @@ async function acceptCall() {
         false
     );
 
-    //sdk.showLocalVideo(true);
-
     const streamManager = VoxImplant.Hardware.StreamManager.get();
     streamManager.on(VoxImplant.Hardware.HardwareEvents.MediaRendererAdded, (e) => {
         const localVideo = document.getElementById("localVideo");
